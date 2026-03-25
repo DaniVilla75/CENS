@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Tecnología y Prácticas Digitales | Prof. Daniel Villarruel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #121212;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Android 15 Smartphone Mock */
+        .phone {
+            max-width: 380px;
+            width: 100%;
+            height: auto;
+            background: #1e1e1e;
+            border-radius: 44px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 8px #2c2c2c, 0 0 0 12px #1a1a1a;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Dynamic Island / Status Bar Android 15 style */
+        .status-bar {
+            background: #1e1e1e;
+            padding: 14px 20px 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 500;
+            color: #e0e0e0;
+            font-family: monospace;
+            letter-spacing: 0.2px;
+        }
+
+        .time {
+            font-weight: 600;
+        }
+
+        .battery {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* contenido scrollable */
+        .screen-content {
+            background: #f8fafc;
+            border-radius: 32px 32px 0 0;
+            padding: 20px 18px 30px 18px;
+            max-height: 700px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        /* ocultar scrollbar pero manteniendo funcionalidad (estético) */
+        .screen-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .screen-content::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        .screen-content::-webkit-scrollbar-thumb {
+            background: #ff9a2e;
+            border-radius: 10px;
+        }
+
+        /* header de bienvenida estilo android widgets */
+        .welcome-card {
+            background: linear-gradient(135deg, #1e4b5e, #0f2c38);
+            border-radius: 28px;
+            padding: 18px 20px;
+            margin-bottom: 24px;
+            color: white;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+        }
+
+        .welcome-card h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .welcome-card p {
+            font-size: 0.8rem;
+            opacity: 0.85;
+            margin-top: 6px;
+        }
+
+        .prof-badge {
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+
+        /* secciones */
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #ff8c2e;
+            margin: 20px 0 12px 6px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        /* grid de cards estilo android 15 material you */
+        .cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            text-decoration: none;
+            display: block;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .card:active {
+            transform: scale(0.98);
+            background: #fefefe;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-content {
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* ícono circular con variantes de color por tipo */
+        .card-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon-tecno {
+            background: linear-gradient(145deg, #ffb347, #ff9a2e);
+        }
+        .icon-esi {
+            background: linear-gradient(145deg, #4c9f70, #2c7a4b);
+        }
+        .icon-proyecto {
+            background: linear-gradient(145deg, #5f7fbf, #3a5a9e);
+        }
+        .icon-web {
+            background: linear-gradient(145deg, #3b82f6, #1e40af);
+        }
+        .icon-ia {
+            background: linear-gradient(145deg, #a855f7, #6b21a5);
+        }
+
+        .card-icon span {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .card-info {
+            flex: 1;
+        }
+
+        .card-info h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1a2e3b;
+            margin-bottom: 4px;
+            letter-spacing: -0.2px;
+        }
+
+        .card-info p {
+            font-size: 0.75rem;
+            color: #6c8695;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .arrow-icon {
+            color: #ff9a2e;
+            font-size: 1rem;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        /* pie de página android style */
+        .android-nav {
+            background: #1e1e1e;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #2c2c2c;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 28px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .nav-icons i {
+            color: #8e8e8e;
+            font-size: 20px;
+            transition: color 0.1s;
+        }
+
+        .nav-icons i.fa-circle {
+            font-size: 12px;
+            color: #ff9a2e;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            font-size: 0.65rem;
+            color: #94a3b8;
+            margin-top: 24px;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* ajustes responsive dentro del teléfono */
+        @media (max-width: 420px) {
+            .phone {
+                max-width: 100%;
+                border-radius: 32px;
+            }
+            .screen-content {
+                padding: 16px 14px 24px 14px;
+            }
+            .card-icon {
+                width: 48px;
+                height: 48px;
+            }
+            .card-icon span {
+                font-size: 20px;
+            }
+            .card-info h3 {
+                font-size: 1rem;
+            }
+            .welcome-card h2 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="phone">
+    <!-- Android 15 Status Bar -->
+    <div class="status-bar">
+        <span class="time">10:28</span>
+        <div class="battery">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <div class="screen-content">
+        <!-- widget saludo estilo material you -->
+        <div class="welcome-card">
+            <h2>Tecnología y<br>Prácticas Digitales</h2>
+            <p>Clases, recursos y proyectos integradores</p>
+            <div class="prof-badge">
+                <i class="fas fa-chalkboard-user"></i> Prof. Daniel Villarruel
+            </div>
+        </div>
+
+        <!-- SECCIÓN TECNOLOGÍA 1 a 6 -->
+        <div class="section-title">
+            <i class="fas fa-laptop-code"></i> TECNOLOGÍA · NIVELES 1 A 6
+        </div>
+        <div class="cards-grid" id="tecnoGrid"></div>
+
+        <!-- SECCIÓN ESI (Educación Sexual Integral) -->
+        <div class="section-title">
+            <i class="fas fa-heart"></i> EDUCACIÓN SEXUAL INTEGRAL (ESI)
+        </div>
+        <div class="cards-grid" id="esiGrid"></div>
+
+        <!-- SECCIÓN PROYECTOS INTEGRADORES -->
+        <div class="section-title">
+            <i class="fas fa-rocket"></i> PROYECTOS INTEGRADORES
+        </div>
+        <div class="cards-grid" id="proyectosGrid"></div>
+
+        <!-- NUEVA SECCIÓN: WEBS ÚTILES -->
+        <div class="section-title">
+            <i class="fas fa-globe"></i> WEBS ÚTILES · RECURSOS DIGITALES
+        </div>
+        <div class="cards-grid" id="websGrid"></div>
+
+        <!-- NUEVA SECCIÓN: INTELIGENCIA ARTIFICIAL -->
+        <div class="section-title">
+            <i class="fas fa-robot"></i> INTELIGENCIA ARTIFICIAL · HERRAMIENTAS
+        </div>
+        <div class="cards-grid" id="iaGrid"></div>
+
+        <div class="footer-copyright">
+            <i class="far fa-copyright"></i> 2026 Prof. Daniel Villarruel · CENS · Todos los derechos reservados
+        </div>
+    </div>
+
+    <!-- Android 15 Navigation Bar (gestual estilo) -->
+    <div class="android-nav">
+        <div class="nav-icons">
+            <i class="fas fa-circle"></i>
+            <i class="fas fa-square"></i>
+            <i class="fas fa-chevron-left"></i>
+            <i class="fas fa-home"></i>
+            <i class="fas fa-chevron-right"></i>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    // Tecnología 1 a 6 (manteniendo los enlaces originales y actualizando algunos placeholder)
+    const tecnologiaCards = [
+        { nivel: "1", nombre: "Tecnología y Prácticas Digitales 1", url: "https://tusitio.com/tecno1", icono: "1", tipo: "tecno" },
+        { nivel: "2", nombre: "Tecnología y Prácticas Digitales 2", url: "https://tusitio.com/tecno2", icono: "2", tipo: "tecno" },
+        { nivel: "3", nombre: "Tecnología y Prácticas Digitales 3", url: "https://danivilla75.github.io/TYPD3/index.html", icono: "3", tipo: "tecno" },
+        { nivel: "4", nombre: "Tecnología y Prácticas Digitales 4", url: "https://tusitio.com/tecno4", icono: "4", tipo: "tecno" },
+        { nivel: "5", nombre: "Tecnología y Prácticas Digitales 5", url: "https://danivilla75.github.io/canva/", icono: "5", tipo: "tecno" },
+        { nivel: "6", nombre: "Tecnología y Prácticas Digitales 6", url: "https://tusitio.com/tecno6", icono: "6", tipo: "tecno" }
+    ];
+
+    // ESI (3 cards originales + una extra para mayor riqueza)
+    const esiCards = [
+        { nombre: "ESI · Educación Sexual Integral", subtitulo: "Talleres y contenidos transversales", url: "https://www.argentina.gob.ar/educacion/esi", icono: "❤️", tipo: "esi" },
+        { nombre: "ESI · Derechos y Cuidados", subtitulo: "Material interactivo + debates", url: "https://www.unicef.org/argentina/educacion/esi", icono: "🤝", tipo: "esi" },
+        { nombre: "ESI · Prevención y Afectividad", subtitulo: "Recursos audiovisuales y guías", url: "https://www.educ.ar/recursos/esi", icono: "🌱", tipo: "esi" }
+    ];
+
+    // Proyectos 1, 2, 3 + WEB existente
+    const proyectosCards = [
+        { nombre: "Proyectos 1", subtitulo: "Diseño y planificación digital", url: "https://tusitio.com/proyectos1", icono: "P1", tipo: "proyecto" },
+        { nombre: "Proyectos 2", subtitulo: "Desarrollo y maquetación", url: "https://tusitio.com/proyectos2", icono: "P2", tipo: "proyecto" },
+        { nombre: "Proyecto 3", subtitulo: "Taller IA", url: "https://danivilla75.github.io/AI/", icono: "P3", tipo: "proyecto" }
+        
+    ];
+    // ========== NUEVAS CARDS: WEBS ÚTILES (plataformas educativas, recursos, bibliotecas digitales) ==========
+    const websCards = [
+        { nombre: "Canva", subtitulo: "Diseño gráfico y presentaciones", url: "https://www.canva.com", icono: "🎨", tipo: "web" },
+        { nombre: "Google Classroom", subtitulo: "Aulas virtuales y gestión educativa", url: "https://classroom.google.com", icono: "📚", tipo: "web" },
+        { nombre: "Profe Dani", subtitulo: "Cursos de programación y más", url: "https://danivilla75.github.io/ProfeDani/", icono: "📖", tipo: "web" },
+        { nombre: "Code.org", subtitulo: "Aprende a programar desde cero", url: "https://code.org", icono: "💻", tipo: "web" },
+        { nombre: "W3Schools", subtitulo: "Tutoriales de desarrollo web", url: "https://www.w3schools.com", icono: "🌐", tipo: "web" },
+        { nombre: "Educ.ar", subtitulo: "Portal educativo argentino", url: "https://www.educ.ar", icono: "🇦🇷", tipo: "web" }
+    ];
+
+    // ========== NUEVAS CARDS: INTELIGENCIA ARTIFICIAL (herramientas gratuitas y educativas) ==========
+    const iaCards = [
+        { nombre: "ChatGPT", subtitulo: "Asistente de IA para investigación", url: "https://chat.openai.com", icono: "🤖", tipo: "ia" },
+        { nombre: "DeepL Write", subtitulo: "Mejora de textos con IA", url: "https://www.deepl.com/write", icono: "✍️", tipo: "ia" },
+        { nombre: "Perplexity AI", subtitulo: "Buscador inteligente con respuestas", url: "https://www.perplexity.ai", icono: "🔍", tipo: "ia" },
+        { nombre: "Gamma", subtitulo: "Presentaciones con IA", url: "https://gamma.app", icono: "📊", tipo: "ia" },
+        { nombre: "Microsoft Copilot", subtitulo: "Asistente IA integrado", url: "https://copilot.microsoft.com", icono: "✨", tipo: "ia" },
+        { nombre: "Leonardo.ai", subtitulo: "Generación de imágenes con IA", url: "https://leonardo.ai", icono: "🖼️", tipo: "ia" }
+    ];
+
+    // Función para crear una card con enlace
+    function crearCard(item, tipoClaseIcono, textoSubtitulo) {
+        const card = document.createElement('a');
+        card.href = item.url;
+        card.className = 'card';
+        card.target = "_blank";
+        card.rel = "noopener noreferrer";
+
+        // Definir clase de ícono según tipo
+        let iconClass = "icon-tecno";
+        if (tipoClaseIcono === "esi") iconClass = "icon-esi";
+        if (tipoClaseIcono === "proyecto") iconClass = "icon-proyecto";
+        if (tipoClaseIcono === "web") iconClass = "icon-web";
+        if (tipoClaseIcono === "ia") iconClass = "icon-ia";
+
+        card.innerHTML = `
+            <div class="card-content">
+                <div class="card-icon ${iconClass}">
+                    <span>${item.icono}</span>
+                </div>
+                <div class="card-info">
+                    <h3>${item.nombre}</h3>
+                    <p>${textoSubtitulo} <span class="arrow-icon">→</span></p>
+                </div>
+            </div>
+        `;
+        return card;
+    }
+
+    // Renderizar tecnología
+    const tecnoGrid = document.getElementById('tecnoGrid');
+    tecnologiaCards.forEach(tec => {
+        const subtitulo = `${tec.nivel} · Acceder a contenidos`;
+        const cardElem = crearCard(tec, "tecno", subtitulo);
+        tecnoGrid.appendChild(cardElem);
+    });
+
+    // Renderizar ESI
+    const esiGrid = document.getElementById('esiGrid');
+    esiCards.forEach(esi => {
+        const subtitulo = esi.subtitulo;
+        const cardElem = crearCard(esi, "esi", subtitulo);
+        esiGrid.appendChild(cardElem);
+    });
+
+    // Renderizar Proyectos
+    const proyectosGrid = document.getElementById('proyectosGrid');
+    proyectosCards.forEach(proy => {
+        const subtitulo = proy.subtitulo;
+        const cardElem = crearCard(proy, "proyecto", subtitulo);
+        proyectosGrid.appendChild(cardElem);
+    });
+
+    // Renderizar nuevas secciones: Webs Útiles
+    const websGrid = document.getElementById('websGrid');
+    websCards.forEach(web => {
+        const subtitulo = web.subtitulo;
+        const cardElem = crearCard(web, "web", subtitulo);
+        websGrid.appendChild(cardElem);
+    });
+
+    // Renderizar Inteligencia Artificial
+    const iaGrid = document.getElementById('iaGrid');
+    iaCards.forEach(ia => {
+        const subtitulo = ia.subtitulo;
+        const cardElem = crearCard(ia, "ia", subtitulo);
+        iaGrid.appendChild(cardElem);
+    });
+
+    // Actualizar hora dinámica estilo Android
+    function updateTime() {
+        const timeElement = document.querySelector('.time');
+        if (timeElement) {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            timeElement.textContent = `${hours}:${minutes}`;
+        }
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+</script>
+</body>
+</html>
